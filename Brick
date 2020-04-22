@@ -1,0 +1,54 @@
+from heapq import heappush, heappop
+import functools
+import operator
+
+def prob(pl):
+    """ returns the probability that *not* all ps are True """
+    a =  1- functools.reduce(operator.mul, pl)
+    if  a >1:
+        return a
+    else:
+        return 0
+
+def generate(lst, num):
+    # Craing Tuples
+    Tups = ((x,) for x in sorted(lst, reverse=True))
+
+    # create a priority queue, sorted by probability
+    pq = [(prob(x),x) for x in tups]
+
+    # because you wanted this
+    yield ()
+    count = 0
+    # as long as there are valid combinations
+    while pq:
+
+        p, x = heappop(pq)
+        yield x
+
+        for other in lst:
+
+            # keeping the tuples sorted -> unique combinations
+            if other < x[-1]:
+
+                # create a new combination
+                new = x+(other,)
+                if sum(new) == num :
+                    #print("Set is", new)
+                    count+=1
+
+                item = prob(new), new
+
+                # add it to the queue
+                heappush(pq,tups)
+
+    print("Total Possible Staircase Sets: ",count)
+
+
+a = []
+num = int(input('How many numbers: '))
+for n in range(1,num):
+    numbers = int(n)
+    a.append(numbers)
+
+list(generate(a,num))
